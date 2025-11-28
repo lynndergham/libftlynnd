@@ -1,0 +1,1151 @@
+
+#include "libft.h"
+
+int	ft_memcmp(const void *s1, const void *s2, size_t n)
+{
+	unsigned char	*p1;
+	unsigned char	*p2;
+	size_t			i;
+
+	p1 = (unsigned char *)s1;
+	p2 = (unsigned char *) s2;
+	i = 0;
+	while (i < n)
+	{
+		if (p1[i] != p2[i])
+		{
+			return ((unsigned char)p1[i] - (unsigned char)p2[i]);
+		}
+		i++;
+	}
+	return (0);
+}
+
+// #include <stdio.h>
+
+// int main(void)
+// {
+//     char s1[] = "Hello";
+//     char s2[] = "Helzo";
+
+//     printf("%d\n", ft_memcmp(s1, s2, 5)); 
+//     printf("%d\n", ft_memcmp(s1, s2, 3)); NAME = libft.a
+
+CC = gcc
+CFLAGS = -Wall -Wextra -Werror
+AR = ar rcs
+RM = rm -f
+
+SRC =	ft_isalpha.c ft_isdigit.c ft_isalnum.c ft_isascii.c ft_isprint.c \
+		ft_strlen.c ft_memset.c ft_bzero.c ft_memcpy.c ft_memmove.c \
+		ft_strlcpy.c ft_strlcat.c ft_toupper.c ft_tolower.c ft_strchr.c \
+		ft_strrchr.c ft_strncmp.c ft_memchr.c ft_memcmp.c ft_strnstr.c \
+		ft_atoi.c ft_calloc.c ft_strdup.c \
+		ft_substr.c ft_strjoin.c ft_strtrim.c ft_split.c ft_itoa.c \
+		ft_strmapi.c ft_striteri.c ft_putchar_fd.c ft_putstr_fd.c \
+		ft_putendl_fd.c ft_putnbr_fd.c
+
+BONUS =	ft_lstnew.c ft_lstadd_front.c ft_lstsize.c \
+		ft_lstlast.c ft_lstadd_back.c ft_lstdelone.c \
+		ft_lstclear.c ft_lstiter.c ft_lstmap.c
+
+OBJ = $(SRC:.c=.o)
+OBJ_BONUS = $(BONUS:.c=.o)
+
+all: $(NAME)
+
+$(NAME): $(OBJ)
+	$(AR) $(NAME) $(OBJ)
+
+bonus: $(OBJ) $(OBJ_BONUS)
+	$(AR) $(NAME) $(OBJ) $(OBJ_BONUS)
+
+%.o: %.c
+	$(CC) $(CFLAGS) -c $< -o $@
+
+clean:
+	$(RM) $(OBJ) $(OBJ_BONUS)
+
+fclean: clean
+	$(RM) $(NAME)
+
+re: fclean all
+
+.PHONY: all clean fclean re bonus
+
+#include "libft.h"
+
+int	ft_atoi(const char *nptr)
+{
+	int	res;
+	int	i;
+	int	sign;
+
+	res = 0;
+	i = 0;
+	sign = 1;
+	while (nptr[i] == ' ' || (nptr[i] >= 9 && nptr[i] <= 13))
+	{
+		i++;
+	}
+	if (nptr[i] == '-' || nptr[i] == '+')
+	{
+		if (nptr[i] == '-')
+		{
+			sign *= -1;
+		}
+		i++;
+	}
+	while (ft_isdigit((unsigned char)nptr[i]))
+	{
+		res = res * 10 + (nptr[i] - '0');
+		i++;
+	}
+	return (res * sign);
+}
+
+#include <stdio.h>
+int main()
+{
+
+printf("%d\n", ft_atoi("42"));                 // 42
+printf("%d\n", ft_atoi("   42"));              // 42
+printf("%d\n", ft_atoi("\t\n\r  42"));         // 42
+printf("%d\n", ft_atoi("+42"));                // 42
+printf("%d\n", ft_atoi("-42"));                // -42
+printf("%d\n", ft_atoi("000123"));             // 123
+printf("%d\n", ft_atoi("  -0012a42"));         // -12
+printf("%d\n", ft_atoi("a42"));                // 0
+printf("%d\n", ft_atoi("999999999999999"));    // undefined (42 won't test overflow)
+printf("%d\n", ft_atoi(""));                   // 0
+printf("%d\n", ft_atoi("   +0"));              // 0
+printf("%d\n", ft_atoi("   -0"));              // 0
+printf("%d\n", ft_atoi("-+42"));               // 0 (stops at non-digit)
+printf("%d\n", ft_atoi("+-42"));               // 0
+printf("%d\n", ft_atoi("--42"));               // 0
+
+}
+
+#include "libft.h"
+
+void		ft_bzero(void *s, size_t n)
+{
+	ft_memset(s, 0, n);
+}
+
+// #include <stdio.h>
+// int main(void)
+// {
+//     char str[] = "Hello";
+//     ft_bzero(str, 3);    
+//     printf("After%s", str);
+// }
+#include "libft.h"
+
+void    *ft_calloc(size_t count, size_t size)
+{
+    void    *ptr;
+    size_t  total_size;
+
+    if (size != 0 && count > SIZE_MAX / size)
+        return (0);
+
+    
+    if (count == 0 || size == 0)
+        return (malloc(1));
+
+   
+    total_size = count * size;
+
+   
+    ptr = malloc(total_size);
+    if (!ptr)
+        return (0);
+
+    
+    ft_memset(ptr, 0, total_size);
+
+    return (ptr);
+}
+
+// #include <stdio.h>
+
+// int main(void)
+// {
+//     int *arr = ft_calloc(5, sizeof(int));
+
+//     for (int i = 0; i < 5; i++)
+//         printf("%d ", arr[i]);
+//     free(arr);
+// }
+#include "libft.h"
+
+int	ft_isalnum(int c)
+{
+	if (ft_isalpha(c) || ft_isdigit(c))
+		return (1);
+	return (0);
+}
+// #include <stdio.h>
+
+// int main(void)
+// {
+//     printf("%d", ft_isalnum('a'));
+//     printf("%d", ft_isalnum('@'));  
+// }
+
+#include "libft.h"
+
+int		ft_isalpha(int c)
+{
+	if ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z'))
+		return (1);
+	else
+		return (0);
+}
+
+#include "libft.h"
+
+int	ft_isascii(int c)
+{
+	return (c >= 0 && c <= 127);
+}
+
+#include "libft.h"
+
+int ft_isdigit(int c)
+{
+    return (c >= '0' && c <= '9');
+}
+
+#include "libft.h"
+
+int	ft_isprint(int c)
+{
+	return (c >= 32 && c <= 126);
+}
+
+
+#include "libft.h"
+
+static void	ft_rev(char *str)
+{
+	int		i;
+	int		len;
+	char	temp;
+
+	len = 0;
+	while (str[len])
+		len++;
+	i = 0;
+	while (i < len / 2)
+	{
+		temp = str[i];
+		str[i] = str[len - 1 - i];
+		str[len - 1 - i] = temp;
+		i++;
+	}
+}
+
+static int	ft_numlen(int n)
+{
+	int				len;
+	unsigned int	x;
+
+	len = 0;
+	if (n == 0)
+		return (1);
+	if (n < 0)
+		x = -n;
+	else
+		x = n;
+	while (x > 0)
+	{
+		len++;
+		x = x / 10;
+	}
+	return (len);
+}
+
+static void	fill_digits(char *p, unsigned int x, int is_negative)
+{
+	int	i;
+
+	i = 0;
+	while (x > 0)
+	{
+		p[i++] = x % 10 + '0';
+		x = x / 10;
+	}
+	if (is_negative)
+		p[i++] = '-';
+	p[i] = '\0';
+	ft_rev(p);
+}
+
+char	*ft_itoa(int n)
+{
+	int				is_negative;
+	unsigned int	x;
+	int				len;
+	char			*p;
+
+	if (n == 0)
+		return (ft_strdup("0"));
+	is_negative = 0;
+	if (n < 0)
+		is_negative = 1;
+	len = ft_numlen(n);
+	p = malloc(sizeof(char) * (len + is_negative + 1));
+	if (!p)
+		return (NULL);
+	if (n < 0)
+		x = -n;
+	else
+		x = n;
+	fill_digits(p, x, is_negative);
+	return (p);
+}
+#include "libft.h"
+
+void	*ft_memchr(const void *s, int c, size_t n)
+{
+	unsigned char	*p;
+	unsigned char	val;
+	size_t			i;
+
+	val = (unsigned char) c;
+	p = (unsigned char *) s;
+	i = 0;
+	while (i < n)
+	{
+		if (p[i] == val)
+		{
+			return (p + i);
+		}
+		i++;
+	}
+	return (0);
+}
+
+// #include <stdio.h>
+
+// int main(void)
+// {
+//     char str[] = "Hello World";
+//     char *result;
+
+//     result = ft_memchr(str, 'W', 11);  
+//     printf("%s", result);
+// }
+
+#include "libft.h"
+
+int	ft_memcmp(const void *s1, const void *s2, size_t n)
+{
+	size_t			i;
+	unsigned char	*p1;
+	unsigned char	*p2;
+
+	p1 = (unsigned char *)s1;
+	p2 = (unsigned char *)s2;
+	i = 0;
+	while (i < n)
+	{
+		if (p1[i] != p2[i])
+			return (p1[i] - p2[i]);
+		i++;
+	}
+	return (0);
+}
+
+#include "libft.h"
+
+void	*ft_memcpy(void *dest, const void *src, size_t n)
+{
+	const unsigned char	*s;
+	unsigned char		*d;
+	size_t				i;
+
+	if (!dest && !src)
+	{
+		return (0);
+	}
+	d = (unsigned char *)dest;
+	s = (const unsigned char *)src;
+	i = 0;
+	while (i < n)
+	{
+		d[i] = s[i];
+		i++;
+	}
+	return (dest);
+}
+
+// #include <stdio.h>
+
+// int main(void)
+// {
+//     char src[] = "Lynn";
+//     char dest[10];
+
+//     ft_memcpy(dest, src, 5);
+//     printf("%s", dest);
+
+// }
+
+#include "libft.h"
+
+void	*ft_memmove(void *dest, const void *src, size_t n)
+{
+	unsigned char		*d;
+	const unsigned char	*s;
+
+	if (!dest && !src)
+		return (0);
+	d = (unsigned char *)dest;
+	s = (const unsigned char *)src;
+	if (d > s)
+	{
+		while (n > 0)
+		{
+			n--;
+			d[n] = s[n];
+		}
+	}
+	else
+	{
+		ft_memcpy(d, s, n);
+	}
+	return (dest);
+}
+
+// #include <stdio.h>
+
+// int main(void)
+// {
+//     char str[20] = "HelloWorld";
+
+//     ft_memmove(str + 2, str, 5);  
+
+//     printf("%s", str);
+
+// }
+
+#include "libft.h"
+
+void	*ft_memset(void *s, int c, size_t n)
+{
+	unsigned char	*p;
+	unsigned char	val;
+	size_t			i;
+
+	p = (unsigned char *) s;
+	val = (unsigned char) c;
+	i = 0;
+	while (i < n)
+	{
+		p[i] = val;
+		i++;
+	}
+	return (s);
+}
+
+// #include <stdio.h>
+// int main ()
+// {
+//     char str[] = "Lynn";
+//     char *result;
+//     result  = ft_memset(str,'*',4) ;
+//     printf("%s",result);
+// }
+#include "libft.h"
+
+void	ft_putchar_fd(char c, int fd)
+{
+	write(fd, &c, 1);
+}
+
+// #include <stdio.h>
+// int main(void)
+// {
+//     ft_putchar_fd('A', 1);   
+//     ft_putchar_fd('\n', 1); 
+// }
+
+
+#include "libft.h"
+
+void	ft_putendl_fd(char *s, int fd)
+{
+	if (!s)
+		return ;
+	ft_putstr_fd(s, fd);
+	ft_putchar_fd('\n', fd);
+}
+
+
+#include "libft.h"
+
+void	ft_putnbr_fd(int nb, int fd)
+{
+	if (nb == -2147483648)
+	{
+		ft_putchar_fd('-', fd);
+		ft_putchar_fd('2', fd);
+		nb = 147483648;
+	}
+	if (nb < 0)
+	{
+		ft_putchar_fd('-', fd);
+		nb *= -1;
+	}
+	if (nb >= 10)
+	{
+		ft_putnbr_fd(nb / 10, fd);
+		ft_putnbr_fd(nb % 10, fd);
+	}
+	else
+		ft_putchar_fd(nb + '0', fd);
+}
+
+
+#include "libft.h"
+
+void	ft_putstr_fd(char *s, int fd)
+{
+	int	i;
+
+	if (!s)
+		return ;
+	i = 0;
+	while (s[i])
+	{
+		ft_putchar_fd(s[i], fd);
+		i++;
+	}
+}
+
+// #include <stdio.h>
+
+// int main(void)
+// {
+//     ft_putstr_fd("Hello, Lynn!", 1); 
+//     ft_putstr_fd("\n", 1);
+// }
+
+#include "libft.h"
+
+int	count_words(char const *s, char c)
+{
+	int	i;
+	int	word_count;
+
+	i = 0;
+	word_count = 0;
+	while (s[i])
+	{
+		while (s[i] && s[i] == c)
+			i++;
+		if (s[i] && s[i] != c)
+		{
+			word_count++;
+			while (s[i] && s[i] != c)
+				i++;
+		}
+	}
+	return (word_count);
+}
+
+char	*copy_word(char const *s, int start, int end)
+{
+	char	*p;
+	int		i;
+
+	p = (char *)malloc(sizeof(char) * (end - start + 1));
+	if (!p)
+		return (NULL);
+	i = 0;
+	while (start < end)
+		p[i++] = s[start++];
+	p[i] = '\0';
+	return (p);
+}
+
+static void	free_all(char **arr, int j)
+{
+	while (j > 0)
+		free(arr[--j]);
+	free(arr);
+}
+
+static int	fill_word(char **arr, char const *s, char c, int j)
+{
+	int	word_beg;
+	int	i;
+
+	i = 0;
+	while (s[i])
+	{
+		while (s[i] && s[i] == c)
+			i++;
+		if (s[i] && s[i] != c)
+		{
+			word_beg = i;
+			while (s[i] && s[i] != c)
+				i++;
+			arr[j] = copy_word(s, word_beg, i);
+			if (!arr[j])
+				return (-1);
+			j++;
+		}
+	}
+	arr[j] = NULL;
+	return (0);
+}
+
+char	**ft_split(char const *s, char c)
+{
+	char	**arr;
+	int		word_count;
+
+	if (!s)
+		return (NULL);
+	word_count = count_words(s, c);
+	arr = (char **)malloc(sizeof(char *) * (word_count + 1));
+	if (!arr)
+		return (NULL);
+	if (fill_word(arr, s, c, 0) == -1)
+	{
+		free_all(arr, count_words(s, c));
+		return (NULL);
+	}
+	return (arr);
+}
+#include "libft.h"
+
+char	*ft_strchr(const char *s, int c)
+{
+	unsigned char	val;
+
+	val = (unsigned char) c;
+	while (*s != val)
+	{
+		if (!*s)
+		{
+			return (0);
+		}
+		s++;
+	}
+	return ((char *)s);
+}
+
+// #include <stdio.h>
+
+// int main(void)
+// {
+//     char str[] = "Hello";
+//     char *p = ft_strchr(str, 'l');
+
+//     printf("%c", *p);
+// }
+#include "libft.h"
+
+char	*ft_strdup(const char *s)
+{
+	char	*p;
+	size_t	i;
+	size_t	size;
+
+	if (!s)
+		return (0);
+	size = ft_strlen(s);
+	p = malloc(sizeof(char) * (size + 1));
+	if (!p)
+		return (0);
+	i = 0;
+	while (i < size)
+	{
+		p[i] = s[i];
+		i++;
+	}
+	p[i] = '\0';
+	return (p);
+}
+
+// #include <stdio.h>
+
+// int main(void)
+// {
+//     char *copy = ft_strdup("Lynn");
+
+//     printf("%s", copy);
+// }
+void	ft_striteri(char *s, void (*f)(unsigned int, char *))
+{
+	unsigned int	i;
+
+	if (!s || !f)
+		return ;
+	i = 0;
+	while (s[i])
+	{
+		f(i, &s[i]);
+		i++;
+	}
+}
+
+#include <stdio.h>
+
+
+void    my_func(unsigned int i, char *c)
+{
+    (void)i;         
+    *c = *c - 32;      
+}
+
+int main(void)
+{
+    char str[] = "lynn";
+
+    ft_striteri(str, my_func);
+    printf("%s\n", str);
+}
+
+#include "libft.h"
+
+char	*ft_strjoin(char const *s1, char const *s2)
+{
+	size_t	i;
+	size_t	j;
+	size_t	len;
+	char	*p;
+
+	len = ft_strlen(s1) + ft_strlen(s2);
+	p = malloc(len + 1);
+	if (!p)
+		return (NULL);
+	i = 0;
+	while (s1[i])
+	{
+		p[i] = s1[i];
+		i++;
+	}
+	j = 0;
+	while (s2[j])
+	{
+		p[i + j] = s2[j];
+		j++;
+	}
+	p[i + j] = '\0';
+	return (p);
+}
+
+// #include <stdio.h>
+
+// int main(void)
+// {
+//     char *result;
+
+//     result = ft_strjoin("Hello", "World");
+//     printf("%s", result);
+// }
+
+#include "libft.h"
+
+size_t	ft_strlcat(char *dest, const char *src, size_t size)
+{
+	size_t	dest_len;
+	size_t	src_len;
+	size_t	i;
+
+	src_len = ft_strlen(src);
+	dest_len = ft_strlen(dest);
+	if (size <= dest_len)
+		return (size + src_len);
+	i = 0;
+	while (src[i] && (dest_len + i + 1) < size)
+	{
+		dest[dest_len + i] = src[i];
+		i++;
+	}
+	dest[dest_len + i] = '\0';
+	return (dest_len + src_len);
+}
+
+// #include <stdio.h>
+
+// int main(void)
+// {
+//     char dest[20] = "Hi";
+//     char src[] = "lynn";
+
+//     ft_strlcat(dest, src, 20);
+
+//     printf("%s", dest);
+// }
+#include "libft.h"
+
+size_t	ft_strlcpy(char *dst, const char *src, size_t size)
+{
+	size_t	i;
+
+	if (size == 0)
+	{
+		return (ft_strlen(src));
+	}
+	i = 0;
+	while (i < size - 1 && src[i])
+	{
+		dst[i] = src[i];
+		i++;
+	}
+	dst[i] = '\0';
+	return (ft_strlen(src));
+}
+
+#include <stdio.h>
+
+int main(void)
+{
+    char dst[20];
+    char *src = "Lynn";
+
+    ft_strlcpy(dst, src, 20);
+
+    printf("%s\n", dst);
+
+}
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   strlen.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/10/28 13:51:33 by marvin            #+#    #+#             */
+/*   Updated: 2025/10/28 13:51:33 by marvin           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include <stddef.h>
+size_t  ft_strlen(const char *s)
+{
+    size_t i;
+    i = 0;
+
+    while(s[i])
+        i++;
+    return(i);
+}
+
+
+// #include <stdio.h>
+// int main()
+// {
+//     printf("%ld",ft_strlen("hdkwj"));
+// }
+#include "libft.h"
+
+char	*ft_strmapi(char const *s, char (*f)(unsigned int, char))
+{
+	unsigned int	i;
+	char			*str;
+
+	if (!s || !f)
+		return (NULL);
+	str = malloc(sizeof(char) * (ft_strlen(s) + 1));
+	if (!str)
+		return (NULL);
+	i = 0;
+	while (s[i])
+	{
+		str[i] = f(i, s[i]);
+		i++;
+	}
+	str[i] = '\0';
+	return (str);
+}
+
+// #include <stdio.h>
+
+
+// char    my_func(unsigned int i, char c)
+// {
+//     return (c + 1);  
+//     (void)i;
+// }
+
+// int main(void)
+// {
+//     char *result;
+
+//     result = ft_strmapi("Lynn", my_func);
+//     printf("%s\n", result);
+
+// }
+
+
+#include "libft.h"
+
+int	ft_strncmp(const char *s1, const char *s2, size_t n)
+{
+	size_t	i;
+
+	i = 0;
+	if (n == 0)
+	{
+		return (0);
+	}
+	while (i < n - 1 && s1[i] == s2[i] && s1[i])
+	{
+		i++;
+	}
+	return ((unsigned char)s1[i] - (unsigned char)s2[i]);
+}
+
+// #include <stdio.h>
+
+// int main(void)
+// {
+//     printf("%d\n", ft_strncmp("Hello", "Hello", 5));  
+//     printf("%d\n", ft_strncmp("Hello", "Helzo", 5)); 
+//     printf("%d\n", ft_strncmp("Hel",   "Hello", 5));  
+//     printf("%d\n", ft_strncmp("Hello", "Hel",   5));
+// }
+#include "libft.h"
+
+char	*ft_strnstr(const char *big, const char *little, size_t len)
+{
+	size_t	i;
+	size_t	j;
+
+	if (*little == '\0')
+		return ((char *)big);
+	i = 0;
+	while (big[i] && i < len)
+	{
+		j = 0;
+		while (big[i + j] && little[j] && (i + j) < len && big[i
+			+ j] == little[j])
+			j++;
+		if (little[j] == '\0')
+			return ((char *)big + i);
+		i++;
+	}
+	return (0);
+}
+
+#include <stdio.h>
+#include "libft.h"
+
+int main(void)
+{
+    char big[] = "HelloWorld";
+    char little[] = "World";
+
+    char *result = ft_strnstr(big, little, 10);
+
+    printf("%s",result);
+}
+
+#include "libft.h"
+
+char	*ft_strrchr(const char *s, int c)
+{
+	unsigned char	n;
+	int				i;
+
+	if (!s)
+		return (0);
+	n = (unsigned char)c;
+	i = ft_strlen(s);
+	while (i >= 0)
+	{
+		if (s[i] == n)
+		{
+			return ((char *)s + i);
+		}
+		i--;
+	}
+	return (0);
+}
+
+// #include <stdio.h>
+
+// int main(void)
+// {
+//     char str[] = "line";
+//     char *result;
+
+//     result = ft_strrchr(str, 'e');
+
+//     printf("%s", result);  
+// }
+#include "libft.h"
+
+static int	in_set(char const c, char const *set)
+{
+	int	i;
+
+	i = 0;
+	while (set[i])
+	{
+		if (c == set[i])
+			return (1);
+		i++;
+	}
+	return (0);
+}
+
+char	*ft_strtrim(char const *s1, char const *set)
+{
+	size_t	start;
+	size_t	end;
+	size_t	i;
+	char	*res;
+
+	if (!s1 || !set)
+		return (NULL);
+	start = 0;
+	while (s1[start] && in_set(s1[start], set))
+		start++;
+	end = ft_strlen(s1);
+	while (end > start && in_set(s1[end - 1], set))
+		end--;
+	res = malloc(sizeof(char) * (end - start + 1));
+	if (!res)
+		return (NULL);
+	i = 0;
+	while (start < end)
+		res[i++] = s1[start++];
+	res[i] = '\0';
+	return (res);
+}
+
+// #include <stdio.h>
+
+// int main(void)
+// {
+//     char *res;
+
+//     res = ft_strtrim("   hello   ", " ");
+//     printf("%s", res);
+
+// }
+    
+
+#include "libft.h"
+
+char	*ft_substr(char const *s, unsigned int start, size_t len)
+{
+	size_t	i;
+	char	*p;
+
+	if (!s)
+		return (NULL);
+	if (start >= ft_strlen(s))
+		return (ft_strdup(""));
+	if (len > ft_strlen(s + start))
+		len = ft_strlen(s + start);
+	p = malloc(sizeof(char) * (len + 1));
+	if (!p)
+		return (NULL);
+	i = 0;
+	while (i < len)
+	{
+		p[i] = s[start + i];
+		i++;
+	}
+	p[i] = '\0';
+	return (p);
+}
+
+// #include <stdio.h>
+
+// int main(void)
+// {
+//     char *str = "HelloWorld";
+//     char *sub;
+
+//     sub = ft_substr(str, 5, 5);  
+//     printf("%s", sub);
+// }
+#include "libft.h"
+
+int			ft_tolower(int c)
+{
+	if (c >= 'A' && c <= 'Z')
+		c += 32;
+	return (c);
+}
+#include "libft.h"
+
+int			ft_toupper(int c)
+{
+	if (c >= 'a' && c <= 'z')
+		c -= 32;
+	return (c);
+}
+#ifndef LIBFT_H
+# define LIBFT_H
+
+# include <stddef.h>
+# include <stdint.h>
+# include <stdlib.h>
+# include <unistd.h>
+
+typedef struct s_list
+{
+	void			*content;
+	struct s_list	*next;
+}					t_list;
+
+int					ft_isalpha(int c);
+int					ft_isdigit(int c);
+int					ft_isalnum(int c);
+int					ft_isascii(int c);
+int					ft_isprint(int c);
+int					ft_toupper(int c);
+int					ft_tolower(int c);
+size_t				ft_strlen(const char *s);
+size_t				ft_strlcat(char *dest, const char *src, size_t size);
+char				*ft_strchr(const char *s, int c);
+char				*ft_strrchr(const char *s, int c);
+int					ft_strncmp(const char *s1, const char *s2, size_t n);
+size_t				ft_strlcpy(char *dst, const char *src, size_t size);
+char				*ft_strnstr(const char *big, const char *little,
+						size_t len);
+void				ft_bzero(void *s, size_t n);
+void				*ft_memset(void *s, int c, size_t n);
+void				*ft_memcpy(void *dest, const void *src, size_t n);
+void				*ft_memmove(void *dest, const void *src, size_t n);
+void				*ft_memchr(const void *s, int c, size_t n);
+int					ft_memcmp(const void *s1, const void *s2, size_t n);
+int					ft_atoi(const char *nptr);
+char				*ft_strdup(const char *s);
+void				*ft_calloc(size_t nmemb, size_t size);
+char				*ft_substr(char const *s, unsigned int start, size_t len);
+char				*ft_strjoin(char const *s1, char const *s2);
+char				*ft_strtrim(char const *s1, char const *set);
+char				*ft_itoa(int n);
+char				*ft_strmapi(char const *s, char (*f)(unsigned int, char));
+void				ft_striteri(char *s, void (*f)(unsigned int, char *));
+void				ft_putchar_fd(char c, int fd);
+char				**ft_split(char const *s, char c);
+void				ft_putstr_fd(char *s, int fd);
+void				ft_putendl_fd(char *s, int fd);
+void				ft_putnbr_fd(int n, int fd);
+t_list				*ft_lstnew(void *content);
+void				ft_lstadd_front(t_list **lst, t_list *new);
+int					ft_lstsize(t_list *lst);
+t_list				*ft_lstlast(t_list *lst);
+void				ft_lstadd_back(t_list **lst, t_list *new);
+void				ft_lstdelone(t_list *lst, void (*del)(void *));
+void				ft_lstclear(t_list **lst, void (*del)(void *));
+void				ft_lstiter(t_list *lst, void (*f)(void *));
+t_list				*ft_lstmap(t_list *lst, void *(*f)(void *),
+						void (*del)(void *));
+
+#endif
+// }
